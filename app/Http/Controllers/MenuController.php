@@ -20,4 +20,13 @@ class MenuController extends Controller
             'menu' => new MenuResource($menu)
         ], 201);
     }
+
+    public function getAll(): JsonResponse
+    {
+        $menus = Menu::all();
+
+        return response()->json([
+            'menus' => MenuResource::collection($menus)
+        ]);
+    }
 }
