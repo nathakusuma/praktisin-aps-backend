@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class MenuResource extends JsonResource
 {
@@ -16,10 +17,11 @@ class MenuResource extends JsonResource
     {
         $data = parent::toArray($request);
 
-        // add full url for the image
-        if (isset($data['gambar_path'])) {
-            $data['gambar_url'] = url('images/menus/' . $data['gambar_path']);
+        // Add full URL for the image
+        if ($this->gambar_path) {
+            $data['gambar_url'] = Storage::disk('public')->url($this->gambar_path);
 
+            // Remove the path since we've added the full URL
             unset($data['gambar_path']);
         }
 

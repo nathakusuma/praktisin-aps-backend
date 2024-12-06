@@ -7,6 +7,7 @@ use App\Http\Requests\MenuUpdateRequest;
 use App\Http\Resources\MenuResource;
 use App\Models\Menu;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
 {
@@ -14,16 +15,17 @@ class MenuController extends Controller
     {
         $data = $request->validated();
 
+        // Handle image upload
+        if ($request->hasFile('gambar')) {
+            $path = $request->file('gambar')->store('menu-images', 'public');
+            $data['gambar_path'] = $path;
+        }
+
+        // Remove image from data since we've processed it
+        unset($data['gambar']);
+
         $menu = new Menu($data);
         $menu->save();
-
-        if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $filename = $menu->id . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images/menus'), $filename);
-            $menu->gambar_path = $filename;
-            $menu->save();
-        }
 
         return response()->json([
             'menu' => new MenuResource($menu)
@@ -51,21 +53,19 @@ class MenuController extends Controller
 
         $data = $request->validated();
 
+        // Handle image upload
         if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $filename = $menu->id . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images/menus'), $filename);
-
-            // delete old image if exists
+            // Delete old image if exists
             if ($menu->gambar_path) {
-                $image_path = public_path('images/menus') . '/' . $menu->gambar_path;
-                if (file_exists($image_path)) {
-                    unlink($image_path);
-                }
+                Storage::disk('public')->delete($menu->gambar_path);
             }
 
-            $data['gambar_path'] = $filename;
+            $path = $request->file('gambar')->store('menu-images', 'public');
+            $data['gambar_path'] = $path;
         }
+
+        // Remove image from data since we've processed it
+        unset($data['gambar']);
 
         $menu->fill($data);
         $menu->save();
@@ -85,12 +85,9 @@ class MenuController extends Controller
             ], 404);
         }
 
-        // delete image if exists
+        // Delete the image file if it exists
         if ($menu->gambar_path) {
-            $image_path = public_path('images/menus') . '/' . $menu->gambar_path;
-            if (file_exists($image_path)) {
-                unlink($image_path);
-            }
+            Storage::disk('public')->delete($menu->gambar_path);
         }
 
         $menu->delete();
