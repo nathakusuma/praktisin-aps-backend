@@ -5,3 +5,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/menus', [MenuController::class, 'create']);
 Route::get('/menus', [MenuController::class, 'getAll']);
+Route::patch('/menus/{id}', [MenuController::class, 'update'])
+    ->where('id', '[0-9]+');

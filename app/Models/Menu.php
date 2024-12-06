@@ -18,4 +18,5 @@ class Menu extends Model
         'ketersediaan',
         'harga'
     ];
+
 }

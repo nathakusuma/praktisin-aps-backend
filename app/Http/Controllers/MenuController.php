@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MenuCreateRequest;
+use App\Http\Requests\MenuUpdateRequest;
 use App\Http\Resources\MenuResource;
 use App\Models\Menu;
 use Illuminate\Http\JsonResponse;
@@ -27,6 +28,25 @@ class MenuController extends Controller
 
         return response()->json([
             'menus' => MenuResource::collection($menus)
+        ]);
+    }
+
+    public function update(int $id, MenuUpdateRequest $request): JsonResponse
+    {
+        $menu = Menu::where('id', $id)->first();
+        if (!$menu) {
+            return response()->json([
+                'message' => 'Menu tidak ditemukaan',
+                'ref_code' => 'RESOURCE_NOT_FOUND'
+            ], 404);
+        }
+
+        $data = $request->validated();
+        $menu->fill($data);
+        $menu->save();
+
+        return response()->json([
+            'menu' => new MenuResource($menu)
         ]);
     }
 }
