@@ -14,6 +14,15 @@ class MenuResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        $data = parent::toArray($request);
+
+        // add full url for the image
+        if (isset($data['gambar_path'])) {
+            $data['gambar_url'] = url('images/menus/' . $data['gambar_path']);
+
+            unset($data['gambar_path']);
+        }
+
+        return $data;
     }
 }

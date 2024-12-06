@@ -28,6 +28,7 @@ class MenuCreateRequest extends FormRequest
             'deskripsi' => 'nullable|string|max:100',
             'ketersediaan' => 'required|integer',
             'harga' => 'required|integer',
+            'gambar' => 'nullable|image|mimes:apng,avif,gif,jpeg,png,svg+xml,webp|max:2048',
         ];
     }
 

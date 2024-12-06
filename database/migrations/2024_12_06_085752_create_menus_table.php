@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->string('nama', 50)->nullable(false);
+            $table->string('nama', 50);
             $table->string('deskripsi', 100)->nullable();
-            $table->integer('ketersediaan', false, true)->nullable(false);
-            $table->integer('harga', false, true)->nullable(false);
+            $table->integer('ketersediaan', false, true);
+            $table->integer('harga', false, true);
+            $table->string('gambar_path')->nullable();
         });
     }
 

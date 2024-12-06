@@ -16,7 +16,8 @@ class Menu extends Model
         'nama',
         'deskripsi',
         'ketersediaan',
-        'harga'
+        'harga',
+        'gambar_path'
     ];
 
 }

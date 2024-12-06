@@ -28,6 +28,7 @@ class MenuUpdateRequest extends FormRequest
             'deskripsi' => 'nullable|string|max:100',
             'ketersediaan' => 'nullable|integer',
             'harga' => 'nullable|integer',
+            'gambar' => 'nullable|image|mimes:apng,avif,gif,jpeg,png,svg+xml,webp|max:2048'
         ];
     }
 

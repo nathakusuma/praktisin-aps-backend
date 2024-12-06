@@ -17,6 +17,14 @@ class MenuController extends Controller
         $menu = new Menu($data);
         $menu->save();
 
+        if ($request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            $filename = $menu->id . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images/menus'), $filename);
+            $menu->gambar_path = $filename;
+            $menu->save();
+        }
+
         return response()->json([
             'menu' => new MenuResource($menu)
         ], 201);
@@ -42,6 +50,23 @@ class MenuController extends Controller
         }
 
         $data = $request->validated();
+
+        if ($request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            $filename = $menu->id . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images/menus'), $filename);
+
+            // delete old image if exists
+            if ($menu->gambar_path) {
+                $image_path = public_path('images/menus') . '/' . $menu->gambar_path;
+                if (file_exists($image_path)) {
+                    unlink($image_path);
+                }
+            }
+
+            $data['gambar_path'] = $filename;
+        }
+
         $menu->fill($data);
         $menu->save();
 
@@ -58,6 +83,14 @@ class MenuController extends Controller
                 'message' => 'Menu tidak ditemukaan',
                 'ref_code' => 'RESOURCE_NOT_FOUND'
             ], 404);
+        }
+
+        // delete image if exists
+        if ($menu->gambar_path) {
+            $image_path = public_path('images/menus') . '/' . $menu->gambar_path;
+            if (file_exists($image_path)) {
+                unlink($image_path);
+            }
         }
 
         $menu->delete();
