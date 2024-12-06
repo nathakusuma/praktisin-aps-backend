@@ -49,4 +49,19 @@ class MenuController extends Controller
             'menu' => new MenuResource($menu)
         ]);
     }
+
+    public function delete(int $id): JsonResponse
+    {
+        $menu = Menu::where('id', $id)->first();
+        if (!$menu) {
+            return response()->json([
+                'message' => 'Menu tidak ditemukaan',
+                'ref_code' => 'RESOURCE_NOT_FOUND'
+            ], 404);
+        }
+
+        $menu->delete();
+
+        return response()->json([], 204);
+    }
 }

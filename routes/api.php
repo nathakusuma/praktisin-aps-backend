@@ -7,3 +7,5 @@ Route::post('/menus', [MenuController::class, 'create']);
 Route::get('/menus', [MenuController::class, 'getAll']);
 Route::patch('/menus/{id}', [MenuController::class, 'update'])
     ->where('id', '[0-9]+');
+Route::delete('/menus/{id}', [MenuController::class, 'delete'])
+    ->where('id', '[0-9]+');
