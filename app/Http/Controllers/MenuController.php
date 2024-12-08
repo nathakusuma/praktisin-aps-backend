@@ -41,6 +41,21 @@ class MenuController extends Controller
         ]);
     }
 
+    public function getById(int $id): JsonResponse
+    {
+        $menu = Menu::where('id', $id)->first();
+        if (!$menu) {
+            return response()->json([
+                'message' => 'Menu tidak ditemukaan',
+                'ref_code' => 'RESOURCE_NOT_FOUND'
+            ], 404);
+        }
+
+        return response()->json([
+            'menu' => new MenuResource($menu)
+        ]);
+    }
+
     public function update(int $id, MenuUpdateRequest $request): JsonResponse
     {
         $menu = Menu::where('id', $id)->first();
