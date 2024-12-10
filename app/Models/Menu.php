@@ -20,4 +20,9 @@ class Menu extends Model
         'gambar_path'
     ];
 
+    protected $casts = [
+        'ketersediaan' => 'int',
+        'harga' => 'int'
+    ];
+
 }
