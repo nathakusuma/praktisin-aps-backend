@@ -25,7 +25,7 @@ class MenuCreateRequest extends FormRequest
     {
         return [
             'nama' => 'required|string|max:50',
-            'deskripsi' => 'nullable|string|max:100',
+            'deskripsi' => 'required|string|max:100',
             'ketersediaan' => 'required|integer',
             'harga' => 'required|integer',
             'gambar' => 'nullable|image|mimes:apng,avif,gif,jpeg,png,svg+xml,webp|max:2048',
