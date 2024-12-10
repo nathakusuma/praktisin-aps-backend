@@ -20,10 +20,12 @@ class MenuResource extends JsonResource
         // Add full URL for the image
         if ($this->gambar_path) {
             $data['gambar_url'] = Storage::disk('public')->url($this->gambar_path);
-
-            // Remove the path since we've added the full URL
-            unset($data['gambar_path']);
+        } else {
+            $data['gambar_url'] = 'https://img.freepik.com/free-photo/top-view-table-full-delicious-food-composition_23-2149141352.jpg';
         }
+
+        // Remove the path since we've added the full URL
+        unset($data['gambar_path']);
 
         return $data;
     }
